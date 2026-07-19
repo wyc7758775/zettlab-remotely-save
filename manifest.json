@@ -1,11 +1,10 @@
 {
-  "id": "remotely-save",
-  "name": "Remotely Save",
-  "version": "0.5.25",
-  "minAppVersion": "0.13.21",
-  "description": "Yet another unofficial plugin allowing users to synchronize notes between local device and the cloud service.",
-  "author": "fyears",
-  "authorUrl": "https://github.com/fyears",
-  "isDesktopOnly": false,
-  "fundingUrl": "https://remotelysave.com"
+  "id": "zettlab-sync",
+  "name": "Zettlab Sync",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "A WebDAV-only sync plugin for Zettlab NAS and Obsidian.",
+  "author": "Zettlab",
+  "authorUrl": "https://github.com/wyc7758775/zettlab-remotely-save",
+  "isDesktopOnly": false
 }

@@ -1,3 +1,5 @@
-The codes or files or subfolders inside the folder `src`, `tests`, `docs`, `assets`, are released under the "Open Source" license: "Apache License, version 2.0", described at: https://www.apache.org/licenses/LICENSE-2.0 .
+Zettlab Sync is licensed under the Apache License, Version 2.0.
 
-The codes or files or subfolders inside the folder `pro`, are released under the "Source Available" license: "PolyForm Strict License 1.0.0", described at: https://polyformproject.org/licenses/strict/1.0.0/ .
+The complete license text is in src/LICENSE.
+
+This repository intentionally excludes the upstream Remotely Save pro/ directory and any PolyForm Strict licensed source. See THIRD_PARTY_NOTICES.md.

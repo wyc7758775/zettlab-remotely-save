@@ -892,9 +892,9 @@ export class FakeFsWebdav extends FakeFs {
   async _readFileFromRoot(key: string): Promise<ArrayBuffer> {
     const buff = (await this.client.getFileContents(key)) as BufferLike;
     if (buff instanceof ArrayBuffer) {
-      return buff;
+      return buff.slice(0) as ArrayBuffer;
     } else if (buff instanceof Buffer) {
-      return bufferToArrayBuffer(buff);
+      return bufferToArrayBuffer(buff) as ArrayBuffer;
     }
     throw Error(`unexpected file content result with type ${typeof buff}`);
   }
