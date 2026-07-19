@@ -5,6 +5,7 @@ import { messyConfigToNormal, normalConfigToMessy } from "./configPersist";
 import { getClient } from "./fsGetter";
 import { FakeFsLocal } from "./fsLocal";
 import { PlainRemoteFs } from "./fsPlain";
+import { t } from "./i18n";
 import {
   getLastFailedSyncTimeByVault,
   getLastSuccessSyncTimeByVault,
@@ -51,19 +52,19 @@ export default class ZettlabSyncPlugin extends Plugin {
       typeof lastFailedSyncAt === "number" ? lastFailedSyncAt : undefined;
 
     this.statusBar = this.addStatusBarItem();
-    this.setStatus("Ready");
+    this.setStatus(t("statusReady"));
     this.addSettingTab(new ZettlabSyncSettingTab(this));
     this.addCommand({
       id: "sync-now",
-      name: "Sync now",
+      name: t("commandSyncNow"),
       callback: () => void this.syncRun("manual"),
     });
     this.addCommand({
       id: "test-webdav-connection",
-      name: "Test WebDAV connection",
+      name: t("commandTestConnection"),
       callback: () => void this.testConnection(),
     });
-    this.addRibbonIcon("refresh-cw", "Sync with Zettlab", () => {
+    this.addRibbonIcon("refresh-cw", t("ribbonSync"), () => {
       void this.syncRun("manual");
     });
     this.registerEvent(
@@ -91,7 +92,7 @@ export default class ZettlabSyncPlugin extends Plugin {
 
   async testConnection(): Promise<boolean> {
     if (!this.isConfigured()) {
-      new Notice("请先完成 Zettlab 接入，或在手动设置中填写 WebDAV 地址。");
+      new Notice(t("connectFirst"));
       return false;
     }
     const remote = getClient(this.settings, this.app.vault.getName(), async () => {
@@ -101,18 +102,22 @@ export default class ZettlabSyncPlugin extends Plugin {
     const connected = await remote.checkConnect((error: unknown) => {
       failure = errorMessage(error);
     });
-    new Notice(connected ? "WebDAV connection succeeded." : `WebDAV connection failed: ${failure}`);
+    new Notice(
+      connected
+        ? t("connectionSuccess")
+        : t("connectionFailed", { reason: failure || t("unknownError") })
+    );
     return connected;
   }
 
   async syncRun(source: SyncTriggerSourceType): Promise<void> {
     if (this.isSyncing) {
-      if (source === "manual") new Notice("A sync is already in progress.");
+      if (source === "manual") new Notice(t("syncInProgress"));
       return;
     }
     if (!this.isConfigured()) {
       if (source === "manual") {
-        new Notice("请先完成 Zettlab 接入，或在手动设置中填写 WebDAV 地址。");
+        new Notice(t("connectFirst"));
       }
       return;
     }
@@ -147,7 +152,7 @@ export default class ZettlabSyncPlugin extends Plugin {
           `Stopped: ${changed}/${total} files would change, above the ${threshold}% safety limit.`,
         (isSyncing) => {
           this.isSyncing = isSyncing;
-          this.setStatus(isSyncing ? "Syncing…" : "Ready");
+          this.setStatus(isSyncing ? t("statusSyncing") : t("statusReady"));
         },
         undefined,
         async (_trigger, error) => {
@@ -169,8 +174,8 @@ export default class ZettlabSyncPlugin extends Plugin {
         this.vaultRandomID,
         this.lastFailedSyncAt
       );
-      this.setStatus("Sync failed");
-      new Notice(`Sync failed: ${failed}`);
+      this.setStatus(t("statusSyncFailed"));
+      new Notice(t("syncFailed", { reason: failed }));
     } else {
       this.lastSuccessfulSyncAt = Date.now();
       await upsertLastSuccessSyncTimeByVault(
@@ -178,7 +183,7 @@ export default class ZettlabSyncPlugin extends Plugin {
         this.vaultRandomID,
         this.lastSuccessfulSyncAt
       );
-      if (source === "manual") new Notice("Sync completed.");
+      if (source === "manual") new Notice(t("syncCompleted"));
     }
   }
 
@@ -217,7 +222,7 @@ export default class ZettlabSyncPlugin extends Plugin {
 
   private setStatus(text: string): void {
     if (this.settings.enableStatusBarInfo && this.statusBar !== undefined) {
-      this.statusBar.textContent = `Zettlab Sync: ${text}`;
+      this.statusBar.textContent = `Zettlab Memo: ${text}`;
     }
   }
 }
