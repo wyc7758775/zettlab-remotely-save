@@ -1,4 +1,4 @@
-import { moment, Notice, Plugin } from "obsidian";
+import { getLanguage, Notice, Plugin } from "obsidian";
 import type { InternalDBs } from "./localdb";
 import type { RemotelySavePluginSettings, SyncTriggerSourceType } from "./baseTypes";
 import { messyConfigToNormal, normalConfigToMessy } from "./configPersist";
@@ -23,7 +23,7 @@ const errorMessage = (error: unknown): string =>
 
 // Obsidian's selected UI language can differ from Electron's navigator.language.
 const localize = (key: MessageKey, values?: Record<string, string>): string =>
-  t(key, values, moment.locale());
+  t(key, values, getLanguage());
 
 export default class ZettlabSyncPlugin extends Plugin {
   settings: RemotelySavePluginSettings = DEFAULT_SETTINGS;
