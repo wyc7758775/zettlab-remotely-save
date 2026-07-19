@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it } from "mocha";
-import { DEFAULT_SETTINGS, normalizeSettings } from "../../src/settingsModel";
+import {
+  DEFAULT_SETTINGS,
+  normalizeSettings,
+  SYNC_ON_SAVE_DELAY_MILLISECONDS,
+} from "../../src/settingsModel";
 
 describe("settings normalization", () => {
   it("keeps only WebDAV-compatible settings when reading legacy data", () => {
@@ -25,5 +29,6 @@ describe("settings normalization", () => {
 
   it("uses conservative WebDAV defaults for a new install", () => {
     assert.deepEqual(normalizeSettings(undefined), DEFAULT_SETTINGS);
+    assert.equal(SYNC_ON_SAVE_DELAY_MILLISECONDS, 1000);
   });
 });

@@ -1,5 +1,7 @@
 import type { RemotelySavePluginSettings } from "./baseTypes";
 
+export const SYNC_ON_SAVE_DELAY_MILLISECONDS = 1000;
+
 export const DEFAULT_SETTINGS: RemotelySavePluginSettings = {
   webdav: {
     address: "",

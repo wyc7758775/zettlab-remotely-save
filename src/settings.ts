@@ -1,6 +1,7 @@
 import { Notice, PluginSettingTab, Setting } from "obsidian";
 import type { ConflictActionType } from "./baseTypes";
 import type ZettlabSyncPlugin from "./main";
+import { SYNC_ON_SAVE_DELAY_MILLISECONDS } from "./settingsModel";
 import { getSyncScheduleSummary } from "./syncOverview";
 export { DEFAULT_SETTINGS, normalizeSettings } from "./settingsModel";
 
@@ -119,25 +120,17 @@ export class ZettlabSyncSettingTab extends PluginSettingTab {
       );
     new Setting(manualSettings)
       .setName("保存后同步")
-      .setDesc("秒；填 0 关闭。")
-      .addText((text) =>
-        text
-          .setValue(
-            this.plugin.settings.syncOnSaveAfterMilliseconds > 0
-              ? String(this.plugin.settings.syncOnSaveAfterMilliseconds / 1000)
-              : "0"
+      .setDesc("开启后，保存停止 1 秒会自动同步。")
+      .addToggle((toggle) =>
+        toggle
+          .setValue(this.plugin.settings.syncOnSaveAfterMilliseconds > 0)
+          .onChange(async (enabled) =>
+            saveText(this.plugin, () => {
+              this.plugin.settings.syncOnSaveAfterMilliseconds = enabled
+                ? SYNC_ON_SAVE_DELAY_MILLISECONDS
+                : -1;
+            })
           )
-          .onChange(async (value) => {
-            const seconds = Number(value);
-            if (!Number.isFinite(seconds) || seconds < 0) {
-              new Notice("请输入不小于 0 的秒数。");
-              return;
-            }
-            await saveText(this.plugin, () => {
-              this.plugin.settings.syncOnSaveAfterMilliseconds =
-                seconds > 0 ? seconds * 1000 : -1;
-            });
-          })
       );
     new Setting(manualSettings)
       .setName("冲突处理")
