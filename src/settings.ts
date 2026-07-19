@@ -1,9 +1,5 @@
 import { Notice, PluginSettingTab, Setting } from "obsidian";
-import type {
-  ConflictActionType,
-  WebdavAuthType,
-  WebdavDepthType,
-} from "./baseTypes";
+import type { ConflictActionType } from "./baseTypes";
 import type ZettlabSyncPlugin from "./main";
 import { getSyncScheduleSummary } from "./syncOverview";
 export { DEFAULT_SETTINGS, normalizeSettings } from "./settingsModel";
@@ -78,9 +74,9 @@ export class ZettlabSyncSettingTab extends PluginSettingTab {
     manualSettings = containerEl.createEl("details", {
       cls: "zettlab-sync-manual-settings",
     });
-    manualSettings.createEl("summary", { text: "手动设置与故障排查" });
+    manualSettings.createEl("summary", { text: "手动接入与同步偏好" });
     manualSettings.createEl("p", {
-      text: "自动接入完成前、迁移旧配置或排障时，才需要填写下面内容。",
+      text: "自动接入完成前、迁移旧配置或排障时，才需要填写地址和 App 密码。用户名固定为 sync，鉴权固定为 Basic。",
     });
 
     new Setting(manualSettings)
@@ -96,13 +92,6 @@ export class ZettlabSyncSettingTab extends PluginSettingTab {
             })
           )
       );
-    new Setting(manualSettings).setName("用户名").addText((text) =>
-      text.setValue(this.plugin.settings.webdav.username).onChange(async (value) =>
-        saveText(this.plugin, () => {
-          this.plugin.settings.webdav.username = value;
-        })
-      )
-    );
     new Setting(manualSettings).setName("密码").addText((text) => {
       text.inputEl.type = "password";
       return text.setValue(this.plugin.settings.webdav.password).onChange(async (value) =>
@@ -111,57 +100,6 @@ export class ZettlabSyncSettingTab extends PluginSettingTab {
         })
       );
     });
-    new Setting(manualSettings)
-      .setName("鉴权类型")
-      .addDropdown((dropdown) =>
-        dropdown
-          .addOption("basic", "Basic")
-          .addOption("digest", "Digest")
-          .setValue(this.plugin.settings.webdav.authType)
-          .onChange(async (value) =>
-            saveText(this.plugin, () => {
-              this.plugin.settings.webdav.authType = value as WebdavAuthType;
-            })
-          )
-      );
-    new Setting(manualSettings)
-      .setName("远程文件夹")
-      .setDesc("留空时使用当前仓库名称。")
-      .addText((text) =>
-        text
-          .setValue(this.plugin.settings.webdav.remoteBaseDir ?? "")
-          .onChange(async (value) =>
-            saveText(this.plugin, () => {
-              this.plugin.settings.webdav.remoteBaseDir = value.trim();
-            })
-          )
-      );
-    new Setting(manualSettings)
-      .setName("WebDAV 列表深度")
-      .addDropdown((dropdown) =>
-        dropdown
-          .addOption("manual_1", "Depth 1")
-          .addOption("manual_infinity", "Depth infinity")
-          .setValue(this.plugin.settings.webdav.depth ?? "manual_1")
-          .onChange(async (value) =>
-            saveText(this.plugin, () => {
-              this.plugin.settings.webdav.depth = value as WebdavDepthType;
-            })
-          )
-      );
-    new Setting(manualSettings)
-      .setName("自定义请求头")
-      .setDesc("每行一个，格式为 Header: Value。")
-      .addTextArea((text) =>
-        text
-          .setValue(this.plugin.settings.webdav.customHeaders ?? "")
-          .onChange(async (value) =>
-            saveText(this.plugin, () => {
-              this.plugin.settings.webdav.customHeaders = value;
-            })
-          )
-      );
-
     new Setting(manualSettings)
       .setName("自动同步间隔")
       .setDesc("分钟；填 0 关闭定时同步。")

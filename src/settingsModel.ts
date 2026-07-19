@@ -3,7 +3,7 @@ import type { RemotelySavePluginSettings } from "./baseTypes";
 export const DEFAULT_SETTINGS: RemotelySavePluginSettings = {
   webdav: {
     address: "",
-    username: "",
+    username: "sync",
     password: "",
     authType: "basic",
     manualRecursive: true,
@@ -40,7 +40,14 @@ export const normalizeSettings = (
 ): RemotelySavePluginSettings => {
   const source = input ?? {};
   const settings: RemotelySavePluginSettings = {
-    webdav: { ...DEFAULT_SETTINGS.webdav, ...source.webdav },
+    webdav: {
+      ...DEFAULT_SETTINGS.webdav,
+      ...source.webdav,
+      // Zettlab's WebDAV service accepts a fixed username and HTTP Basic only.
+      // Do not carry legacy provider credentials or auth modes into this plugin.
+      username: "sync",
+      authType: "basic",
+    },
     password: "",
     serviceType: "webdav",
     autoRunEveryMilliseconds:

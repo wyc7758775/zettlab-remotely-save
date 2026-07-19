@@ -17,7 +17,8 @@ describe("settings normalization", () => {
     assert.equal(normalized.serviceType, "webdav");
     assert.equal(normalized.password, "");
     assert.equal(normalized.webdav.address, "https://nas.example.test/dav");
-    assert.equal(normalized.webdav.username, "wyc");
+    assert.equal(normalized.webdav.username, "sync");
+    assert.equal(normalized.webdav.authType, "basic");
     assert.deepEqual(normalized.ignorePaths, ["^tmp/"]);
     assert.equal("s3" in (normalized as unknown as Record<string, unknown>), false);
   });
