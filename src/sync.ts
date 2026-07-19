@@ -1,3 +1,8 @@
+/*
+ * Derived from Remotely Save commit 7ca2d192552819777318d9d521dca45450934b4f
+ * (Apache-2.0). Modified by Zettlab to use the plaintext WebDAV adapter and
+ * an in-tree bounded worker pool instead of upstream queue dependencies.
+ */
 import XRegExp from "xregexp";
 import type {
   ConflictActionType,
@@ -1217,7 +1222,6 @@ export const doActualSync = async (
   );
   profiler?.insertSize("doActualSync: sizeof realTotalCount", deletionOps);
 
-
   if (
     protectModifyPercentage >= 0 &&
     realModifyDeleteCount >= 0 &&
@@ -1262,7 +1266,6 @@ export const doActualSync = async (
   for (let i = 0; i < nested.length; ++i) {
     profiler?.addIndent();
     profiler?.insert(`doActualSync: step ${i} start`);
-
     const operations = nested[i];
     // console.debug(`curr operations=${JSON.stringify(operations, null, 2)}`);
 

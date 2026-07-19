@@ -36,4 +36,4 @@ Then enable **Zettlab Sync** in Obsidian community plugins, set the WebDAV addre
 
 ## License and provenance
 
-This project is Apache-2.0. It retains and modifies Apache-2.0 code from the pre-license-split [Remotely Save](https://github.com/remotely-save/remotely-save) snapshot `7ca2d19`; all `pro/` source and PolyForm-licensed code are excluded. See [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
+This project is Apache-2.0. It retains and modifies Apache-2.0 code from the pre-license-split [Remotely Save](https://github.com/remotely-save/remotely-save) snapshot `7ca2d192552819777318d9d521dca45450934b4f`; all `pro/` source and PolyForm-licensed code are excluded from the current source tree. See [NOTICE](./NOTICE) and [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).

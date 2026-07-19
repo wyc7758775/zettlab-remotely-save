@@ -1,3 +1,7 @@
+/*
+ * Derived from Remotely Save commit 7ca2d192552819777318d9d521dca45450934b4f
+ * (Apache-2.0). Modified by Zettlab.
+ */
 import isEqual from "lodash/isEqual";
 import { base64url } from "rfc4648";
 import { reverseString } from "./misc";

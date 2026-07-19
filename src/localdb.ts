@@ -1,3 +1,7 @@
+/*
+ * Derived from Remotely Save commit 7ca2d192552819777318d9d521dca45450934b4f
+ * (Apache-2.0). Modified by Zettlab.
+ */
 import localforage from "localforage";
 import { extendPrototype as ep1 } from "localforage-getitems";
 import { extendPrototype as ep2 } from "localforage-removeitems";

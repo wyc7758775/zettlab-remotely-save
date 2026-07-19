@@ -1,3 +1,7 @@
+/*
+ * Derived from Remotely Save commit 7ca2d192552819777318d9d521dca45450934b4f
+ * (Apache-2.0). Modified by Zettlab.
+ */
 import { getLanguage, Notice, Plugin } from "obsidian";
 import type { InternalDBs } from "./localdb";
 import type { RemotelySavePluginSettings, SyncTriggerSourceType } from "./baseTypes";

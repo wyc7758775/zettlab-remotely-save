@@ -2,4 +2,6 @@ Zettlab Sync is licensed under the Apache License, Version 2.0.
 
 The complete license text is in src/LICENSE.
 
-This repository intentionally excludes the upstream Remotely Save pro/ directory and any PolyForm Strict licensed source. See THIRD_PARTY_NOTICES.md.
+This distribution contains modified Apache-2.0 portions of Remotely Save. See NOTICE and THIRD_PARTY_NOTICES.md for attribution and provenance.
+
+This repository intentionally excludes the upstream Remotely Save pro/ directory and any PolyForm Strict licensed source.

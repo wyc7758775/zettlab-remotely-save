@@ -36,4 +36,4 @@ npm run build
 
 ## 许可证与来源
 
-本项目采用 Apache-2.0。它保留并修改了 [Remotely Save](https://github.com/remotely-save/remotely-save) 在许可证拆分前的 Apache-2.0 快照 `7ca2d19`；所有 `pro/` 源码及 PolyForm 代码均未包含。详见 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)。
+本项目采用 Apache-2.0。它保留并修改了 [Remotely Save](https://github.com/remotely-save/remotely-save) 在许可证拆分前的 Apache-2.0 快照 `7ca2d192552819777318d9d521dca45450934b4f`；当前源码树不包含任何 `pro/` 源码及 PolyForm 代码。详见 [NOTICE](./NOTICE) 与 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)。

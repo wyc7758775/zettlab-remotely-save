@@ -1,3 +1,7 @@
+/*
+ * Derived from Remotely Save commit 7ca2d192552819777318d9d521dca45450934b4f
+ * (Apache-2.0). Modified by Zettlab.
+ */
 import { Buffer } from "buffer";
 import { Queue } from "@fyears/tsqueue";
 import { getReasonPhrase } from "http-status-codes/build/cjs/utils-functions";
