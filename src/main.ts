@@ -1,11 +1,11 @@
-import { Notice, Plugin } from "obsidian";
+import { moment, Notice, Plugin } from "obsidian";
 import type { InternalDBs } from "./localdb";
 import type { RemotelySavePluginSettings, SyncTriggerSourceType } from "./baseTypes";
 import { messyConfigToNormal, normalConfigToMessy } from "./configPersist";
 import { getClient } from "./fsGetter";
 import { FakeFsLocal } from "./fsLocal";
 import { PlainRemoteFs } from "./fsPlain";
-import { t } from "./i18n";
+import { t, type MessageKey } from "./i18n";
 import {
   getLastFailedSyncTimeByVault,
   getLastSuccessSyncTimeByVault,
@@ -20,6 +20,10 @@ import { getSyncOverview, type SyncOverview } from "./syncOverview";
 
 const errorMessage = (error: unknown): string =>
   error instanceof Error ? error.message : String(error);
+
+// Obsidian's selected UI language can differ from Electron's navigator.language.
+const localize = (key: MessageKey, values?: Record<string, string>): string =>
+  t(key, values, moment.locale());
 
 export default class ZettlabSyncPlugin extends Plugin {
   settings: RemotelySavePluginSettings = DEFAULT_SETTINGS;
@@ -52,19 +56,19 @@ export default class ZettlabSyncPlugin extends Plugin {
       typeof lastFailedSyncAt === "number" ? lastFailedSyncAt : undefined;
 
     this.statusBar = this.addStatusBarItem();
-    this.setStatus(t("statusReady"));
+    this.setStatus(localize("statusReady"));
     this.addSettingTab(new ZettlabSyncSettingTab(this));
     this.addCommand({
       id: "sync-now",
-      name: t("commandSyncNow"),
+      name: localize("commandSyncNow"),
       callback: () => void this.syncRun("manual"),
     });
     this.addCommand({
       id: "test-webdav-connection",
-      name: t("commandTestConnection"),
+      name: localize("commandTestConnection"),
       callback: () => void this.testConnection(),
     });
-    this.addRibbonIcon("refresh-cw", t("ribbonSync"), () => {
+    this.addRibbonIcon("refresh-cw", localize("ribbonSync"), () => {
       void this.syncRun("manual");
     });
     this.registerEvent(
@@ -92,7 +96,7 @@ export default class ZettlabSyncPlugin extends Plugin {
 
   async testConnection(): Promise<boolean> {
     if (!this.isConfigured()) {
-      new Notice(t("connectFirst"));
+      new Notice(localize("connectFirst"));
       return false;
     }
     const remote = getClient(this.settings, this.app.vault.getName(), async () => {
@@ -104,20 +108,22 @@ export default class ZettlabSyncPlugin extends Plugin {
     });
     new Notice(
       connected
-        ? t("connectionSuccess")
-        : t("connectionFailed", { reason: failure || t("unknownError") })
+        ? localize("connectionSuccess")
+        : localize("connectionFailed", {
+            reason: failure || localize("unknownError"),
+          })
     );
     return connected;
   }
 
   async syncRun(source: SyncTriggerSourceType): Promise<void> {
     if (this.isSyncing) {
-      if (source === "manual") new Notice(t("syncInProgress"));
+      if (source === "manual") new Notice(localize("syncInProgress"));
       return;
     }
     if (!this.isConfigured()) {
       if (source === "manual") {
-        new Notice(t("connectFirst"));
+        new Notice(localize("connectFirst"));
       }
       return;
     }
@@ -152,7 +158,9 @@ export default class ZettlabSyncPlugin extends Plugin {
           `Stopped: ${changed}/${total} files would change, above the ${threshold}% safety limit.`,
         (isSyncing) => {
           this.isSyncing = isSyncing;
-          this.setStatus(isSyncing ? t("statusSyncing") : t("statusReady"));
+          this.setStatus(
+            isSyncing ? localize("statusSyncing") : localize("statusReady")
+          );
         },
         undefined,
         async (_trigger, error) => {
@@ -174,8 +182,8 @@ export default class ZettlabSyncPlugin extends Plugin {
         this.vaultRandomID,
         this.lastFailedSyncAt
       );
-      this.setStatus(t("statusSyncFailed"));
-      new Notice(t("syncFailed", { reason: failed }));
+      this.setStatus(localize("statusSyncFailed"));
+      new Notice(localize("syncFailed", { reason: failed }));
     } else {
       this.lastSuccessfulSyncAt = Date.now();
       await upsertLastSuccessSyncTimeByVault(
@@ -183,7 +191,7 @@ export default class ZettlabSyncPlugin extends Plugin {
         this.vaultRandomID,
         this.lastSuccessfulSyncAt
       );
-      if (source === "manual") new Notice(t("syncCompleted"));
+      if (source === "manual") new Notice(localize("syncCompleted"));
     }
   }
 
